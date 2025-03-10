@@ -6,6 +6,13 @@ __pycache__/
 # C extensions
 *.so
 
+*.db
+*.html
+*.jpg
+*.png
+*.webm
+*.webp
+
 # Distribution / packaging
 .Python
 build/
