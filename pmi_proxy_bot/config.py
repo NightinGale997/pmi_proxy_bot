@@ -33,8 +33,12 @@ MAIL_USERNAME = os.getenv("MAIL_USERNAME")
 MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
 MAIL_IMAP_SERVER = os.getenv("MAIL_IMAP_SERVER", "imap.mail.ru")
 
-SEND_SCHEDULE_TIME = os.getenv("SEND_SCHEDULE_TIME")
-CHANGE_CHAT_NAME_TIME = os.getenv("CHANGE_CHAT_NAME_TIME")
+# Время в формате HH:MM, когда бот отправляет расписание и
+# меняет название беседы. Если переменные окружения не заданы,
+# устанавливаем безопасные значения по умолчанию, чтобы
+# планировщик не падал с ошибкой "at() should be passed a string".
+SEND_SCHEDULE_TIME = os.getenv("SEND_SCHEDULE_TIME", "09:00")
+CHANGE_CHAT_NAME_TIME = os.getenv("CHANGE_CHAT_NAME_TIME", "00:00")
 
 vk_to_telegram_message_ids = []
 telegram_to_vk_message_ids = []
