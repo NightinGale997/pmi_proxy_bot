@@ -213,10 +213,10 @@ class TelegramMessageHandler:
         return "Событие добавлено."
 
     def flush_media_group(self, media_group_id):
+        if media_group_id in self.media_group_timers:
+            del self.media_group_timers[media_group_id]
         if media_group_id in self.media_groups_buffer:
-            messages = self.media_groups_buffer.pop(media_group_id)
-            if media_group_id in self.media_group_timers:
-                del self.media_group_timers[media_group_id]
+            messages = self.media_groups_buffer[media_group_id]
             if messages:
                 self.forward_to_vk(messages[-1])
 
