@@ -202,7 +202,7 @@ class TelegramMessageHandler:
             event_datetime = datetime.datetime.strptime(date_str, "%d.%m.%Y %H:%M")
             event_datetime = event_datetime.replace(tzinfo=TIMEZONE)
         except Exception:
-            return "Неверный формат даты/времени. Используйте формат DD.MM.YYYYHH:MM."
+            return "Неверный формат даты/времени. Используйте формат DD.MM.YYYY HH:MM."
         rest = parts[3]
         if '|' not in rest:
             return ("Неверный формат команды. Используйте: \n"
