@@ -1,0 +1,6 @@
+requests
+vk_api
+schedule
+selenium
+python-dotenv
+pytest
