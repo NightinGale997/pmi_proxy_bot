@@ -6,7 +6,7 @@ from pmi_proxy_bot.config import TIMEZONE
 def test_add_and_get_event(tmp_path):
     db_file = tmp_path / "events.db"
     manager = DatabaseManager(str(db_file))
-    event_time = datetime.datetime.now(TIMEZONE) + datetime.timedelta(hours=1)
+    event_time = datetime.datetime(2099, 1, 1, 12, 0, 0, tzinfo=TIMEZONE)
     manager.add_event(event_time, "Title", "Desc")
     events = manager.get_all_events()
     assert len(events) == 1
