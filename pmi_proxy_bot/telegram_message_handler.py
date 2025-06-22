@@ -120,20 +120,21 @@ class TelegramMessageHandler:
                 reply_to_message_str = f"\n>> <i>от <a href=\"{reply_profile_url}\"><b>{reply_sender_name}</b></a>: {reply_text}</i>"
         combined_text = f"<a href=\"{profile_url}\">{emoji} {sender_name}</a>:\n"
         main_attachments = []
-        if text:
-            combined_text += text
         messages = [message]
         if message.get('media_group_id'):
             messages = self.media_groups_buffer.pop(message['media_group_id'], [message])
         media_items = []
         doc_attachments = []
-        for msg in messages:
+        for i, msg in enumerate(messages):
             if msg.get('media_group_id'):
                 text = msg.get('caption', '')
             else:
-                text = msg.get('text', '')
+                text = msg.get('text', '') or msg.get('caption', '')
             if text:
-                combined_text += "\n" + text
+                if i == 0:
+                    combined_text += text
+                else:
+                    combined_text += "\n" + text
             if 'photo' in msg:
                 photo_sizes = msg['photo']
                 best_photo = max(photo_sizes, key=lambda p: p.get('width', 0))
