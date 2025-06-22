@@ -1,4 +1,5 @@
 import datetime
+import pytest
 from pmi_proxy_bot.schedule_manager import ScheduleManager
 from pmi_proxy_bot.config import TIMEZONE
 
