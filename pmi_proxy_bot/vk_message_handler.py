@@ -109,7 +109,6 @@ class VKMessageHandler:
 
         main_attachments = message.get('attachments', [])
         media_items = []
-        doc_attachments = []
         wall_url = ""
 
         for att in main_attachments:
@@ -126,8 +125,7 @@ class VKMessageHandler:
                 doc = att.get('doc', {})
                 url = doc.get('url')
                 if url:
-                    title = doc.get('title', 'файл')
-                    doc_attachments.append((url, title))
+                    media_items.append({"type": "document", "media": url})
             elif att_type == 'wall':
                 wall = att.get('wall', {})
                 id_val = wall.get('id')
@@ -139,15 +137,26 @@ class VKMessageHandler:
                 elif wall_author.get('type') == 'profile':
                     wall_url += f"\nhttps://vk.com/id{wall_author.get('id')}?w=wall{wall_author.get('id')}_{id_val}"
 
-        if media_items:
+        if len(media_items) > 1:
             media_items[0]["caption"] = formatted_text + wall_url
             media_items[0]["parse_mode"] = "HTML"
             self.telegram_service.send_media_group(media_items, self.telegram_service.chat_id)
+        elif len(media_items) == 1:
+            item = media_items[0]
+            if item["type"] == "photo":
+                self.telegram_service.send_photo_with_caption(
+                    item["media"], formatted_text + wall_url, chat_id=self.telegram_service.chat_id
+                )
+            else:
+                self.telegram_service.send_document_with_caption(
+                    item["media"], formatted_text + wall_url, chat_id=self.telegram_service.chat_id
+                )
         else:
-            self.telegram_service.send_text(formatted_text + wall_url, parse_mode="HTML", chat_id=self.telegram_service.chat_id)
-
-        for url, title in doc_attachments:
-            self.telegram_service.send_document(url, chat_id=self.telegram_service.chat_id, file_name=title)
+            self.telegram_service.send_text(
+                formatted_text + wall_url,
+                parse_mode="HTML",
+                chat_id=self.telegram_service.chat_id,
+            )
 
         logging.info(
             "Forwarded VK message from '%s' to Telegram chat ID %s. Text snippet: %.50s. FWD count=%d",
